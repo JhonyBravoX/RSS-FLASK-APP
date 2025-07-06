@@ -1,0 +1,274 @@
+/* GLOBAL */
+* {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  transition: all 0.2s ease-in-out;
+}
+
+body.light {
+  background-color: #f5f5f7;
+  color: #222;
+}
+
+body.dark {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+.container {
+  display: flex;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 260px;
+  background: #1f1f1f;
+  color: white;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar h2 {
+  margin: 0 0 20px;
+  font-size: 1.3em;
+}
+
+.sidebar a {
+  color: #bbb;
+  display: block;
+  margin: 12px 0;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.sidebar a:hover {
+  color: #fff;
+}
+
+.sidebar input,
+.sidebar button {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background-color: #2b2b2b;
+  color: #fff;
+}
+
+/* CATEGORY LIST */
+.category-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.category-list li {
+  margin: 5px 0;
+}
+
+.category-list a {
+  text-decoration: none;
+  color: #bbb;
+  padding: 5px 10px;
+  display: block;
+  border-radius: 5px;
+  transition: 0.2s;
+}
+
+.category-list a.selected,
+.category-list a:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+body.dark .category-list a {
+  color: #bbb;
+}
+
+body.dark .category-list a.selected,
+body.dark .category-list a:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+/* MAIN CONTENT */
+.main-content {
+  flex-grow: 1;
+  padding: 30px;
+  background: inherit;
+}
+
+.article-card {
+  display: flex;
+  background-color: #fff;
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 25px;
+  gap: 20px;
+  border: 1px solid #ddd;
+}
+
+body.dark .article-card {
+  background-color: #1e1e1e;
+  border-color: #333;
+}
+
+body.dark .article-card h3,
+body.dark .article-card p,
+body.dark .article-card .meta,
+body.dark .article-card a {
+  color: #e0e0e0;
+}
+
+.thumbnail {
+  width: 140px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.article-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.2em;
+}
+
+.article-card p.meta {
+  font-size: 0.9em;
+  margin-top: 8px;
+  color: #888;
+}
+
+body.dark .article-card p.meta {
+  color: #aaa;
+}
+
+/* --- Style for the duplicate badge --- */
+.duplicate-badge {
+  background-color: red;
+  color: white;
+  font-size: 0.7em;
+  border-radius: 50%;
+  padding: 3px 8px;
+  margin-left: 10px;
+}
+
+/* BUTTONS */
+button, a[target="view_tab"] {
+  background: #1a73e8;
+  color: #fff;
+  padding: 8px 14px;
+  margin: 6px 5px 0 0;
+  border-radius: 6px;
+  border: none;
+  font-size: 0.9em;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
+}
+
+button:hover, a[target="view_tab"]:hover {
+  background: #0c59d8;
+}
+
+.actions {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* FORM STYLES */
+form {
+  margin: 0;
+}
+
+select, input[type="text"], input[type="url"] {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95em;
+}
+
+form.lang-form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* LANGUAGE FORM BUTTON */
+.lang-form button {
+  background: #28a745;
+  font-weight: 600;
+}
+
+.lang-form button:hover {
+  background: #218838;
+}
+
+/* VIEW TAB BUTTON */
+a[target="view_tab"] {
+  margin-left: 0;
+}
+
+/* DARK OVERRIDES */
+body.dark .sidebar {
+  background: #181818;
+}
+
+body.dark .sidebar input,
+body.dark .sidebar button {
+  background-color: #2d2d2d;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+body.dark select,
+body.dark input[type="text"],
+body.dark input[type="url"] {
+  background-color: #292929;
+  color: #f0f0f0;
+  border: 1px solid #444;
+}
+
+/* Search bar styles */
+.search-bar {
+  display: flex;
+  margin-left: auto;
+}
+
+.search-bar input {
+  padding: 6px;
+  border-radius: 4px 0 0 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.search-bar button {
+  padding: 6px 10px;
+  border: none;
+  background: #2196F3;
+  color: white;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+.search-bar button:hover {
+  background: #1976D2;
+}
+
+/* NEW FORM STYLES */
+form input[type="text"],
+form input[type="number"],
+form select {
+  margin-top: 5px;
+  padding: 5px;
+  width: 250px;
+}
+
+form button {
+  margin-left: 10px;
+}
