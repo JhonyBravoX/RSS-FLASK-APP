@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Citizen Journalist</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    /* Sidebar settings */
+    .sidebar a.settings-link {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    /* Grid & View Mode */
+    .grid .article-card {
+      width: calc(33% - 20px);
+      flex-direction: column;
+    }
+
+    .grid .article-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .read-status {
+      font-size: 0.8em;
+      margin-left: 10px;
+      color: #999;
+    }
+
+    .read .read-status { color: #4CAF50; }
+    .unread .read-status { color: #f44336; }
+
+    .title-only .article-card > div > p,
+    .title-only .article-card img,
+    .title-only .actions {
+      display: none;
+    }
+
+    .card-only .article-card > div > p.meta,
+    .card-only .article-card > div > p.truncate {
+      display: none;
+    }
+
+    .thumbnail {
+      width: 140px;
+      height: 90px;
+      object-fit: cover;
+    }
+
+    .truncate {
+      display: inline-block;
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Search bar styles */
+    .search-bar {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+    }
+
+    .search-bar input[type="text"] {
+      padding: 5px;
+      font-size: 1em;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      width: 200px;
+      margin-right: 5px;
+    }
+
+    .search-bar button {
+      padding: 5px 10px;
+      font-size: 1em;
+      cursor: pointer;
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+
+    /* New view-options styles */
+    .view-options {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .view-options label {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .view-options select {
+      padding: 5px;
+      font-size: 1em;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+  <script>
+    let viewMode = localStorage.getItem('viewMode') || 'list';
+    let articleFilter = localStorage.getItem('articleFilter') || 'all';
+
+    function switchView(mode) {
+      const articleList = document.getElementById('articleList');
+      articleList.className = 'article-list ' + mode;
+      localStorage.setItem('viewMode', mode);
+      document.getElementById('viewMode').value = mode; // Sync dropdown
+    }
+
+    function setFilter(mode) {
+      const cards = document.querySelectorAll('.article-card');
+      cards.forEach(card => {
+        if (mode === 'all') {
+          card.style.display = '';
+        } else {
+          card.style.display = card.classList.contains(mode) ? '' : 'none';
+        }
+      });
+      localStorage.setItem('articleFilter', mode);
+      document.getElementById('filterMode').value = mode; // Sync dropdown
+    }
+
+    function toggleRead(el) {
+      fetch(`/toggle_read`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `link=${encodeURIComponent(el.dataset.link)}`
+      }).then(response => {
+        if (response.ok) {
+          el.classList.toggle('read');
+          el.classList.toggle('unread');
+          el.querySelector('.read-status').innerText = el.classList.contains('read') ? 'Read' : 'Unread';
+        }
+      });
+    }
+
+    window.onload = () => {
+      switchView(viewMode);
+      setFilter(articleFilter);
+    };
+  </script>
+  <meta http-equiv="refresh" content="{{ settings.refresh * 60 }}">
+</head>
+<body class="{{ settings.theme }}">
+  <div class="container">
+    <aside class="sidebar">
+      <h2>⭐ Favorites</h2>
+      <a href="/favorites">Go to Saved Articles</a>
+      <a class="settings-link" href="/settings">⚙ Settings</a>
+      <hr>
+
+      <h4>📂 Categories</h4>
+      <ul class="category-list">
+        <li><a href="/">All</a></li>
+        {% for cat in categories %}
+          <li>
+            <a href="/?category={{ cat }}" class="{{ 'selected' if selected_category == cat }}">{{ cat }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <hr>
+      <form method="post" action="/add_category">
+        <input type="text" name="category" placeholder="New category">
+        <button type="submit">➕ Add Category</button>
+      </form>
+    </aside>
+
+    <main class="main-content">
+      <div class="top-bar">
+        <h1>🗞️ Latest Articles</h1>
+        <form method="GET" action="/" class="search-bar">
+          <input type="text" name="q" placeholder="Search articles…" value="{{ request.args.get('q','') }}">
+          <button type="submit">🔍</button>
+        </form>
+        <div class="view-options">
+          <label for="viewMode">🖥 View Mode:</label>
+          <select id="viewMode" onchange="switchView(this.value)">
+            <option value="list">📃 List</option>
+            <option value="grid">🔳 Grid</option>
+            <option value="card-only">📦 Cards Only</option>
+            <option value="title-only">📄 Title Only</option>
+          </select>
+
+          <label for="filterMode">📂 Filter:</label>
+          <select id="filterMode" onchange="setFilter(this.value)">
+            <option value="all">🔁 All</option>
+            <option value="unread">📩 Unread</option>
+            <option value="read">✅ Read</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="articleList" class="article-list">
+        {% for article in articles|reverse %}
+          <div class="article-card {{ 'unread' if article.unread else 'read' }}" onclick="toggleRead(this)" data-link="{{ article.link }}">
+            {% if article.image %}
+              <img src="{{ article.image }}" class="thumbnail" alt="image">
+            {% endif %}
+            <div>
+              <h3>
+                {{ article.title }}
+                {% if article.count|default(0) > 1 %}
+                  <span class="duplicate-count">{{ article.count }}</span>
+                {% endif %}
+              </h3>
+              <p class="truncate">{{ article.summary[:40] }}{% if article.summary|length > 40 %}...{% endif %}</p>
+              <p class="meta">
+                🗓 {{ article.published }} | 🏷 {{ article.source }} |
+                <a href="{{ article.link }}" target="_blank">🔗 Full Article</a>
+                <span class="read-status">{{ 'Unread' if article.unread else 'Read' }}</span>
+              </p>
+              <div class="actions">
+                <form method="post" action="/favorite" style="display:inline;">
+                  <input type="hidden" name="title" value="{{ article.title }}">
+                  <input type="hidden" name="link" value="{{ article.link }}">
+                  <input type="hidden" name="source" value="{{ article.source }}">
+                  <input type="hidden" name="published" value="{{ article.published }}">
+                  <input type="hidden" name="summary" value="{{ article.summary }}">
+                  <input type="hidden" name="image" value="{{ article.image }}">
+                  <input type="hidden" name="category" value="{{ article.category }}">
+                  <button type="submit">⭐ Save</button>
+                </form>
+                <form method="post" action="/summarize" target="view_tab" style="display:inline;">
+                  <input type="hidden" name="url" value="{{ article.link }}">
+                  <button type="submit">🧠 AI Summary</button>
+                </form>
+                <form method="post" action="/narrate" target="_blank" style="display:inline;">
+                  <input type="hidden" name="summary" value="{{ article.summary }}">
+                  <button type="submit">🔈 Narrate</button>
+                </form>
+                <a href="/view_article?title={{ article.title|urlencode }}&summary={{ article.summary|urlencode }}&link={{ article.link|urlencode }}&published={{ article.published|urlencode }}&source={{ article.source|urlencode }}&image={{ article.image|urlencode }}&category={{ article.category|urlencode }}" target="view_tab">
+                  🖥 View in Tab
+                </a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </main>
+  </div>
+</body>
+</html>
