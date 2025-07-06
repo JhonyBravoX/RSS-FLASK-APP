@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title }}</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      margin: 0;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 900px;
+      background-color: #fff;
+      margin: auto;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+    }
+
+    .meta {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 20px;
+    }
+
+    .summary {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .actions {
+      margin-top: 30px;
+    }
+
+    .actions a, .actions button {
+      display: inline-block;
+      margin-right: 10px;
+      padding: 8px 12px;
+      background-color: #2196F3;
+      color: white;
+      text-decoration: none;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .actions a:hover, .actions button:hover {
+      background-color: #1976D2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>{{ title }}</h1>
+    <div class="meta">
+      🗓 {{ published }} | 🏷 {{ source }}
+    </div>
+
+    {% if image %}
+      <img src="{{ image }}" alt="Article Image">
+    {% endif %}
+
+    <div class="summary">
+      {{ summary }}
+    </div>
+
+    <div class="actions">
+      <a href="{{ link }}" target="_blank">🔗 Read Full Article</a>
+      <form method="post" action="/summarize" style="display:inline;" target="_blank">
+        <input type="hidden" name="url" value="{{ link }}">
+        <button type="submit">🧠 AI Summary</button>
+      </form>
+      <form method="post" action="/narrate" style="display:inline;" target="_blank">
+        <input type="hidden" name="summary" value="{{ summary }}">
+        <button type="submit">🔈 Narrate</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

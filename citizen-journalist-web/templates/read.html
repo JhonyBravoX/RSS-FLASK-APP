@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Read Mode - Citizen Journalist</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .read-mode {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: var(--bg-color);
+      color: var(--text-color);
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      border-radius: 10px;
+    }
+
+    .read-mode h1 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .read-mode p {
+      line-height: 1.8;
+      font-size: 1.1rem;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 1rem;
+      text-decoration: none;
+      color: var(--text-color);
+      border: 1px solid var(--text-color);
+      padding: 6px 12px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body class="{{ settings.theme }}">
+  <div class="read-mode">
+    <a href="/" class="back-btn">⬅ Back</a>
+    <h1>{{ article.title }}</h1>
+    <p><strong>🗓</strong> {{ article.published }} | <strong>🏷</strong> {{ article.source }}</p>
+    <hr>
+    <p>{{ article.summary }}</p>
+  </div>
+</body>
+</html>

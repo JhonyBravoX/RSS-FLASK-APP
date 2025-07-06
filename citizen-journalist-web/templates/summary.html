@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Summary</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 30px;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      max-width: 800px;
+      margin: auto;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .meta {
+      font-size: 0.9em;
+      color: #888;
+      margin-bottom: 20px;
+    }
+
+    pre {
+      background-color: #f0f0f0;
+      padding: 15px;
+      border-radius: 5px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    a.back-link {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #2196F3;
+    }
+
+    a.back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧠 AI Summary</h1>
+    <div class="meta">
+      {% if title %}<strong>Title:</strong> {{ title }}<br>{% endif %}
+      {% if source %}<strong>Source:</strong> {{ source }}<br>{% endif %}
+      {% if published %}<strong>Published:</strong> {{ published }}<br>{% endif %}
+    </div>
+
+    <pre>{{ summary }}</pre>
+
+    <a class="back-link" href="/">← Back to Articles</a>
+  </div>
+</body>
+</html>

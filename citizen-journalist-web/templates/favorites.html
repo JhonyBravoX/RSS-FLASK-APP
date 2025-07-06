@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>⭐ Saved Articles - Citizen Journalist</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f8fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .saved-article {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      padding: 15px;
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
+    }
+
+    .saved-article img {
+      width: 120px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .saved-article h2 {
+      margin: 0 0 10px 0;
+      font-size: 18px;
+    }
+
+    .saved-article p.meta {
+      font-size: 13px;
+      color: #666;
+      margin: 5px 0;
+    }
+
+    .saved-article .actions {
+      margin-top: 10px;
+    }
+
+    .actions form {
+      display: inline-block;
+    }
+
+    .actions button {
+      margin-right: 5px;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+
+    .back-link {
+      margin-top: 20px;
+      display: inline-block;
+      text-decoration: none;
+      color: #2196F3;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⭐ Your Saved Articles</h1>
+
+    {% for article in articles %}
+      <div class="saved-article">
+        {% if article.image %}
+          <img src="{{ article.image }}" alt="image">
+        {% endif %}
+        <div>
+          <h2>{{ article.title }}</h2>
+          <p class="meta">
+            🗓 {{ article.published }} | 🏷 {{ article.source }} |
+            <a href="{{ article.link }}" target="_blank">🔗 Full Article</a>
+          </p>
+          <p>{{ article.summary }}</p>
+          <div class="actions">
+            <form method="post" action="/remove_favorite">
+              <input type="hidden" name="link" value="{{ article.link }}">
+              <button type="submit">❌ Remove</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <p>No saved articles yet.</p>
+    {% endfor %}
+
+    <a href="/" class="back-link">← Back to Main Page</a>
+  </div>
+</body>
+</html>

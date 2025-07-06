@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Translation - {{ lang }}</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <meta http-equiv="refresh" content="{{ settings.refresh * 60 }}">
+  <style>
+    .translate-container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    body.dark .translate-container {
+      background-color: #262626;
+      color: #e0e0e0;
+    }
+
+    .translate-container h1 {
+      margin-top: 0;
+      text-align: center;
+    }
+
+    .translation-block {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .translation-block div {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 300px;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 1em;
+      resize: vertical;
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      color: #333;
+    }
+
+    body.dark textarea {
+      background-color: #333;
+      color: #e0e0e0;
+      border: 1px solid #555;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #4CAF50;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    label {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body class="{{ settings.theme }}">
+  <div class="container">
+    <aside class="sidebar">
+      <h2>🌐 Translate</h2>
+      <a href="/">🏠 Home</a>
+      <a href="/favorites">⭐ Favorites</a>
+      <a href="/settings">⚙ Settings</a>
+    </aside>
+
+    <main class="main-content">
+      <div class="translate-container">
+        <h1>Translation - {{ lang }}</h1>
+
+        <div class="translation-block">
+          <div>
+            <label>Original</label>
+            <textarea readonly>{{ original }}</textarea>
+          </div>
+          <div>
+            <label>Translated</label>
+            <textarea readonly>{{ translated }}</textarea>
+          </div>
+        </div>
+
+        <a class="back-link" href="/">← Back to Articles</a>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

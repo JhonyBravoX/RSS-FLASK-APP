@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="settings-container">
+  <h1>⚙️ Settings</h1>
+
+  <section>
+    <h2>⏱ Auto-Refresh</h2>
+    <form method="post" action="/update_settings">
+      <label for="refresh">Refresh Interval (minutes):</label>
+      <input type="number" name="refresh" id="refresh" min="1" value="{{ settings.refresh }}">
+      <button type="submit">💾 Save</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>🎨 Theme</h2>
+    <form method="post" action="/update_settings">
+      <label for="theme">Choose Theme:</label>
+      <select name="theme" id="theme">
+        <option value="light" {% if settings.theme == 'light' %}selected{% endif %}>🌞 Light</option>
+        <option value="dark" {% if settings.theme == 'dark' %}selected{% endif %}>🌚 Dark</option>
+      </select>
+      <button type="submit">💾 Save</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>🧭 Manage Feeds</h2>
+
+    <form method="post" action="/add_feed">
+      <input type="text" name="name" placeholder="Feed Name" required>
+      <input type="text" name="url" placeholder="Feed URL" required>
+      <label for="category">Category:</label>
+      <select name="category" id="category">
+        <option value="">Uncategorized</option>
+        {% for cat in settings.categories %}
+          <option value="{{ cat }}">{{ cat }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">➕ Add Feed</button>
+    </form>
+
+    <hr>
+    {% for idx, feed in enumerate(feeds) %}
+      <div style="margin-bottom: 10px; padding: 10px; border: 1px solid #ccc;">
+        🔗 <strong>{{ feed.name }}</strong><br>
+        🌐 <small>{{ feed.url }}</small><br>
+        📁 Category: {{ feed.category }}
+
+        <form method="post" action="/delete_feed/{{ idx }}" style="display:inline;">
+          <button type="submit">❌ Remove</button>
+        </form>
+
+        <form method="post" action="/rename_feed/{{ idx }}" style="display:inline;">
+          <input type="text" name="new_name" placeholder="New Name" required>
+          <label for="category_{{ idx }}">Category:</label>
+          <select name="category" id="category_{{ idx }}">
+            <option value="" {% if feed.category == '' %}selected{% endif %}>Uncategorized</option>
+            {% for cat in settings.categories %}
+              <option value="{{ cat }}" {% if feed.category == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+          </select>
+          <button type="submit">✏ Rename</button>
+        </form>
+      </div>
+    {% endfor %}
+  </section>
+
+  <section>
+    <h2>🗂 OPML Import/Export</h2>
+
+    <form method="post" action="/import_opml" enctype="multipart/form-data">
+      <input type="file" name="opml_file" required>
+      <button type="submit">📥 Import OPML</button>
+    </form>
+    <br>
+    <a href="/export_opml">📤 Export OPML</a>
+  </section>
+</div>
+{% endblock %}

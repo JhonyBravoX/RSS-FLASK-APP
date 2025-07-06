@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title }} - Article</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    body {
+      padding: 20px;
+    }
+    .article {
+      max-width: 800px;
+      margin: auto;
+      background-color: var(--card-bg);
+      padding: 20px;
+      border-radius: 12px;
+    }
+    img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    .actions {
+      margin-top: 15px;
+    }
+    .actions form, .actions a {
+      margin-right: 10px;
+      display: inline-block;
+    }
+    .meta {
+      color: gray;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body class="{{ settings.theme }}">
+  <div class="article">
+    {% if image %}
+      <img src="{{ image }}" alt="Article Image">
+    {% endif %}
+
+    <h2>{{ title }}</h2>
+    <p class="meta">
+      🗓 {{ published }} |
+      🏷 {{ source }} |
+      🔗 <a href="{{ link }}" target="_blank">Original Link</a>
+    </p>
+
+    <p>{{ summary }}</p>
+
+    <div class="actions">
+      <form method="post" action="/ai_summary" target="_self">
+        <input type="hidden" name="title" value="{{ title }}">
+        <input type="hidden" name="link" value="{{ link }}">
+        <button type="submit">🧠 AI Summary</button>
+      </form>
+
+      <form method="post" action="/translate" target="_self">
+        <input type="hidden" name="summary" value="{{ summary }}">
+        <select name="lang">
+          <option value="Urdu">Urdu</option>
+          <option value="Russian">Russian</option>
+          <option value="Arabic">Arabic</option>
+          <option value="Hebrew">Hebrew</option>
+          <option value="Hindi">Hindi</option>
+          <option value="French">French</option>
+          <option value="Spanish">Spanish</option>
+        </select>
+        <button type="submit">🌐 Translate</button>
+      </form>
+
+      <form method="post" action="/narrate">
+        <input type="hidden" name="summary" value="{{ summary }}">
+        <button type="submit">🔊 Narrate</button>
+      </form>
+
+      <form method="post" action="/copy">
+        <input type="hidden" name="title" value="{{ title }}">
+        <input type="hidden" name="summary" value="{{ summary }}">
+        <input type="hidden" name="link" value="{{ link }}">
+        <button type="submit">📋 Copy Article Info</button>
+      </form>
+
+      <button onclick="window.close();">❌ Close Tab</button>
+    </div>
+  </div>
+</body>
+</html>
